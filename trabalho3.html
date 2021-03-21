@@ -1,0 +1,120 @@
+<script>
+
+    // Grafo 1
+    grafo = [
+        [0, 1, 1, 0, 0, 1, 1],
+        [1, 0, 1, 1, 0, 1, 0],
+        [1, 1, 0, 1, 1, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1],
+        [0, 0, 1, 1, 0, 1, 1],
+        [1, 1, 0, 0, 1, 0, 1],
+        [1, 0, 0, 1, 1, 1, 0],
+    ]
+
+    //Grafo 2
+    // grafo = [
+    //     [1, 0, 1, 1, 0, 1, 0],
+    //     [1, 1, 0, 1, 0, 0, 0],
+    //     [0, 1, 1, 0, 1, 0, 1],
+    //     [0, 0, 1, 1, 0, 1, 1],
+    //     [1, 1, 0, 0, 1, 0, 1],
+    //     [1, 0, 0, 1, 1, 1, 0]
+    // ]
+
+    //Grafo 3
+    // grafo = [
+    //     [1, 0, 1, 0, 0, 0, 0],
+    //     [1, 1, 0, 1, 0, 0, 0],
+    //     [0, 0, 1, 0, 1, 0, 0],
+    //     [0, 0, 0, 1, 0, 1, 1],
+    //     [1, 0, 0, 0, 1, 0, 1],
+    //     [1, 0, 0, 0, 1, 1, 0]
+    // ]
+
+    //Grafo 4
+    // grafo = [
+    //     [1, 0, 1, 0, 0, 0, 0],
+    //     [1, 1, 0, 1, 0, 0, 0],
+    //     [0, 0, 1, 0, 1, 0, 0],
+    //     [0, 0, 0, 1, 0, 1, 0],
+    //     [1, 0, 0, 0, 1, 0, 1],
+    //     [1, 0, 0, 0, 0, 1, 0]
+    // ]
+
+    function calcGraus() {
+        let graus = []
+        for (let i = 0; i < grafo.length; i++) {
+            graus.push(0)
+            for (j = 0; j < grafo[i].length; j++) {
+                if (grafo[i][j] == 1) {
+                    graus[i] = graus[i] + 1;
+                }
+            }
+        }
+        return graus;
+    }
+
+    function dirac() {
+
+        let graus = calcGraus()
+
+        if (grafo.length < 3) {
+            return false;
+        }
+
+        for (let i = 0; i < graus.length; i++) {
+            if (graus[i] <= grafo.length / 2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function ore() {
+
+        let graus = calcGraus(grafo)
+
+        if (grafo.length < 3) {
+            return false;
+        }
+
+        for (let i = 0; i < graus.length - 1; i++) {
+            for (j = i + 1; j < grafo[i].length; j++) {
+                if (graus[i] + graus[j] < grafo.length) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    function bondyChvatal() {
+        let graus = calcGraus(grafo);
+
+        if (grafo.length < 3) {
+            return false;
+        }
+
+        grafo2 = grafo;
+
+        for (let i = 0; i < graus.length - 1; i++) {
+            for (let j = i + 1; j < grafo[i].length; j++) {
+                if (grafo2[i][j] == 0) {
+                    if (graus[i] + graus[j] >= grafo.length) {
+                        grafo2[i][j] = 1;
+                        grafo2[j][i] = 1;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    console.log('Teorema de Ore: ', ore());
+    console.log('Teorema de Bondy & Chvátal: ', bondyChvatal());
+    console.log('Teorema de Dirac: ', dirac())
+
+</script>
